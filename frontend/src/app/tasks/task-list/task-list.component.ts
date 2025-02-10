@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { Task } from '../task.model';
+import { TaskService } from '../task.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-tasks-list',
@@ -9,10 +11,19 @@ import { Task } from '../task.model';
 export class TaskListComponent implements OnInit {
   tasks: Task[];
 
-  constructor() {
+  constructor(private taskService: TaskService) {
     this.tasks = [];
   }
   ngOnInit() {
     console.log('wassssup ?? ');
+    this.loadTasks();
+  }
+
+  loadTasks(): void {
+    this.taskService.getTasks().subscribe((tasks) => (this.tasks = tasks));
+  }
+
+  deleteTask(id: string) {
+    console.log('clicked delete');
   }
 }
