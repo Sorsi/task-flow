@@ -1,13 +1,15 @@
-<h2 mat-dialog-title>Hi</h2>
+<h2 mat-dialog-title>Add a new task</h2>
 <mat-dialog-content [formGroup]="form">
+  <mat-form-field>
+    <input matInput placeholder="Name of the task" formControlName="name" />
+  </mat-form-field>
   <mat-form-field>
     <input
       matInput
-      placeholder="Course Description"
+      placeholder="Description of the task"
       formControlName="description"
     />
   </mat-form-field>
-  ....
 </mat-dialog-content>
 
 <mat-dialog-actions>
