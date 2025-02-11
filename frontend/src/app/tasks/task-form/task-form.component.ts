@@ -8,6 +8,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 export class TaskFormComponent {
   taskForm = new FormGroup({
     title: new FormControl('', [Validators.required, Validators.minLength(3)]),
+    description: new FormControl(''),
     assignee: new FormControl(''),
     dueDate: new FormControl(null),
     priority: new FormControl('Medium', Validators.required),

@@ -1,18 +1,9 @@
 <h2 mat-dialog-title>Add a new task</h2>
 <mat-dialog-content [formGroup]="form">
-  <mat-form-field>
-    <input matInput placeholder="Name of the task" formControlName="name" />
-  </mat-form-field>
-  <mat-form-field>
-    <input
-      matInput
-      placeholder="Description of the task"
-      formControlName="description"
-    />
-  </mat-form-field>
+  <app-task-form></app-task-form>
 </mat-dialog-content>
 
 <mat-dialog-actions>
-  <button class="mat-raised-button" (click)="close()">Close</button>
-  <button class="mat-raised-button mat-primary" (click)="save()">Save</button>
+  <button mat-raised-button (click)="close()">Close</button>
+  <button mat-raised-button mat-primary (click)="save()">Save</button>
 </mat-dialog-actions>

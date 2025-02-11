@@ -1,37 +1,59 @@
 <form [formGroup]="taskForm" (ngSubmit)="submitForm()">
-  <label>
-    Title:
-    <input formControlName="title" placeholder="Enter task title" />
-    <span
-      *ngIf="taskForm.controls.title.invalid && taskForm.controls.title.touched"
-    >
-      Title is required (min. 3 characters).
-    </span>
-  </label>
+  <mat-dialog-content>
+    <mat-form-field>
+      <label>
+        Title:
+        <input
+          matInput
+          formControlName="title"
+          placeholder="Enter task title"
+        />
+        <span
+          *ngIf="
+            taskForm.controls.title.invalid && taskForm.controls.title.touched
+          "
+        >
+          Title is required (min. 3 characters).
+        </span>
+      </label>
+    </mat-form-field>
 
-  <label>
-    Assignee:
-    <input formControlName="assignee" placeholder="Assign to someone" />
-  </label>
+    <mat-form-field>
+      <label>
+        Assignee:
+        <input
+          matInput
+          formControlName="assignee"
+          placeholder="Assign to someone"
+        />
+      </label>
+    </mat-form-field>
 
-  <label>
-    Due Date:
-    <input type="date" formControlName="dueDate" />
-  </label>
+    <mat-form-field>
+      <label>
+        Due Date:
+        <input matInput type="date" formControlName="dueDate" />
+      </label>
+    </mat-form-field>
 
-  <label>
-    Priority:
-    <select formControlName="priority">
-      <option value="Low">Low</option>
-      <option value="Medium">Medium</option>
-      <option value="High">High</option>
-    </select>
-  </label>
+    <mat-form-field>
+      <label>
+        Priority:
+        <select formControlName="priority">
+          <option value="Low">Low</option>
+          <option value="Medium">Medium</option>
+          <option value="High">High</option>
+        </select>
+      </label>
+    </mat-form-field>
 
-  <label>
-    Completed:
-    <input type="checkbox" formControlName="completed" />
-  </label>
+    <mat-form-field>
+      <label>
+        Completed:
+        <input type="checkbox" formControlName="completed" />
+      </label>
+    </mat-form-field>
+  </mat-dialog-content>
 
   <button type="submit" [disabled]="taskForm.invalid">Submit Task</button>
 </form>
