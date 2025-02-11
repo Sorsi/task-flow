@@ -1,0 +1,37 @@
+<form [formGroup]="taskForm" (ngSubmit)="submitForm()">
+  <label>
+    Title:
+    <input formControlName="title" placeholder="Enter task title" />
+    <span
+      *ngIf="taskForm.controls.title.invalid && taskForm.controls.title.touched"
+    >
+      Title is required (min. 3 characters).
+    </span>
+  </label>
+
+  <label>
+    Assignee:
+    <input formControlName="assignee" placeholder="Assign to someone" />
+  </label>
+
+  <label>
+    Due Date:
+    <input type="date" formControlName="dueDate" />
+  </label>
+
+  <label>
+    Priority:
+    <select formControlName="priority">
+      <option value="Low">Low</option>
+      <option value="Medium">Medium</option>
+      <option value="High">High</option>
+    </select>
+  </label>
+
+  <label>
+    Completed:
+    <input type="checkbox" formControlName="completed" />
+  </label>
+
+  <button type="submit" [disabled]="taskForm.invalid">Submit Task</button>
+</form>
