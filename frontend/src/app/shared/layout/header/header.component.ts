@@ -22,6 +22,4 @@ export class HeaderComponent {
 
     this.dialog.open(TaskDialogComponent, dialogConfig);
   }
-
-  addView(): void {}
 }

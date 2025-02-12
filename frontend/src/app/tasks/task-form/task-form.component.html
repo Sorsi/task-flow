@@ -1,59 +1,61 @@
-<form [formGroup]="taskForm" (ngSubmit)="submitForm()">
+<form [formGroup]="taskForm">
   <mat-dialog-content>
+    <!-- TITLE -->
     <mat-form-field>
-      <label>
-        Title:
-        <input
-          matInput
-          formControlName="title"
-          placeholder="Enter task title"
-        />
-        <span
-          *ngIf="
-            taskForm.controls.title.invalid && taskForm.controls.title.touched
-          "
-        >
-          Title is required (min. 3 characters).
-        </span>
-      </label>
+      <mat-label>{{ taskFormLabels.title }}</mat-label>
+      <input
+        matInput
+        formControlName="title"
+        placeholder="Enter task title"
+        required
+      />
+      <mat-error *ngIf="titleControl?.invalid && titleControl?.touched">
+        Title is required (min. 3 characters).</mat-error
+      >
     </mat-form-field>
-
+    <!-- DESCRIPTION -->
     <mat-form-field>
-      <label>
-        Assignee:
-        <input
-          matInput
-          formControlName="assignee"
-          placeholder="Assign to someone"
-        />
-      </label>
+      <mat-label>{{ taskFormLabels.description }}</mat-label>
+      <input
+        matInput
+        formControlName="description"
+        placeholder="Enter description of your task"
+        type="textarea"
+      />
     </mat-form-field>
-
+    <!-- ASSIGNEE -->
     <mat-form-field>
-      <label>
-        Due Date:
-        <input matInput type="date" formControlName="dueDate" />
-      </label>
+      <mat-label>{{ taskFormLabels.assignee }}</mat-label>
+      <input
+        matInput
+        formControlName="assignee"
+        placeholder="Assign to someone"
+      />
     </mat-form-field>
-
+    <!-- DUE DATE -->
+    <mat-form-field type="date">
+      <mat-label>{{ taskFormLabels.dueDate }}</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="dueDate" />
+      <mat-hint>MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="picker">
+        <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+      </mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <!-- PRIORITY -->
     <mat-form-field>
-      <label>
-        Priority:
-        <select formControlName="priority">
-          <option value="Low">Low</option>
-          <option value="Medium">Medium</option>
-          <option value="High">High</option>
-        </select>
-      </label>
+      <mat-label>{{ taskFormLabels.priority }}</mat-label>
+      <mat-select formControlName="priority">
+        <mat-option *ngFor="let priority of priorities" [value]="priority">{{
+          priority
+        }}</mat-option>
+      </mat-select>
     </mat-form-field>
-
-    <mat-form-field>
-      <label>
-        Completed:
-        <input type="checkbox" formControlName="completed" />
-      </label>
-    </mat-form-field>
+    <!-- COMPLETED -->
+    <section>
+      <mat-checkbox formControlName="completed" ngDefaultControl>{{
+        taskFormLabels.completed
+      }}</mat-checkbox>
+    </section>
   </mat-dialog-content>
-
-  <button type="submit" [disabled]="taskForm.invalid">Submit Task</button>
 </form>

@@ -1,36 +1,38 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import { TaskFormComponent } from 'src/app/tasks/task-form/task-form.component';
+import { TaskService } from 'src/app/tasks/task.service';
 
 @Component({
   selector: 'app-task-dialog',
   templateUrl: './task-dialog.component.html',
 })
 export class TaskDialogComponent implements OnInit {
-  readonly dialogRef = inject(MatDialogRef<TaskDialogComponent>);
+  @ViewChild(TaskFormComponent) taskFormComponent!: TaskFormComponent;
 
-  form: FormGroup;
-  description: string;
+  constructor(
+    private dialogRef: MatDialogRef<TaskDialogComponent>,
+    private taskService: TaskService
+  ) {}
 
-  constructor(private fb: FormBuilder) {
-    this.form = this.fb.group({});
-    this.description = '';
-  }
+  ngOnInit(): void {}
 
-  ngOnInit(): void {
-    this.form = this.fb.group({
-      name: [this.description || []],
-      description: [this.description || []],
-    });
-  }
-  onNoClick(): void {
-    this.dialogRef.close();
+  isFormValid(): boolean {
+    return this.taskFormComponent?.taskForm.valid ?? false;
   }
 
   save(): void {
-    console.log('SAVE this.form.value ', this.form.value);
-
-    this.dialogRef.close(this.form.value);
+    if (this.isFormValid()) {
+      console.log(
+        'save dialog is vlaid ',
+        this.taskFormComponent.taskForm.value
+      );
+      const task = this.taskFormComponent.taskForm.value;
+      this.taskService
+        .createTask(task)
+        .subscribe((ta) => console.log('taaa ', ta));
+      this.close();
+    }
   }
 
   close(): void {

@@ -1,23 +1,35 @@
-import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Priority } from '../task.model';
 
 @Component({
   selector: 'app-task-form',
   templateUrl: './task-form.component.html',
 })
 export class TaskFormComponent {
-  taskForm = new FormGroup({
-    title: new FormControl('', [Validators.required, Validators.minLength(3)]),
-    description: new FormControl(''),
-    assignee: new FormControl(''),
-    dueDate: new FormControl(null),
-    priority: new FormControl('Medium', Validators.required),
-    completed: new FormControl(false),
-  });
+  taskForm: FormGroup;
+  taskFormLabels = {
+    title: 'Title',
+    description: 'Sample task description',
+    assignee: 'Assigne',
+    dueDate: 'Due Date',
+    priority: 'Priority',
+    completed: 'Completed',
+  };
+  priorities: Priority[] = [Priority.LOW, Priority.MEDIUM, Priority.HIGH];
 
-  submitForm() {
-    if (this.taskForm.valid) {
-      console.log('Task submitted: ', this.taskForm.value);
-    }
+  constructor(private fb: FormBuilder) {
+    this.taskForm = this.fb.group({
+      title: ['', [Validators.required, Validators.minLength(3)]],
+      description: [''],
+      assignee: [''],
+      dueDate: [''],
+      priority: [Priority.MEDIUM],
+      completed: [false],
+    });
+  }
+
+  get titleControl() {
+    return this.taskForm.get('title');
   }
 }
