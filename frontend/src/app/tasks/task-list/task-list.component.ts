@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Task } from '../task.model';
+import { Priority, Task } from '../task.model';
 import { TaskService } from '../task.service';
 import { Observable } from 'rxjs';
 
@@ -9,6 +9,14 @@ import { Observable } from 'rxjs';
   styleUrls: ['./task-list.component.less'],
 })
 export class TaskListComponent implements OnInit {
+  displayedColumns: string[] = [
+    'title',
+    'assignee',
+    'dueDate',
+    'status',
+    'priority',
+    'actions',
+  ];
   tasks$: Observable<Task[]>;
 
   constructor(private _taskService: TaskService) {
@@ -25,5 +33,18 @@ export class TaskListComponent implements OnInit {
         console.error('Error loading tasks:', err);
       },
     });
+  }
+
+  getStatusColor(status: string): string {
+    switch (status) {
+      case Priority.LOW:
+        return 'warn';
+      case Priority.MEDIUM:
+        return 'primary';
+      case Priority.HIGH:
+        return 'accent';
+      default:
+        return '';
+    }
   }
 }
