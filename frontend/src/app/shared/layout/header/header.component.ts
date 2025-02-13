@@ -10,7 +10,7 @@ import { TaskDialogComponent } from '../../dialogs/task-dialog.component';
 export class HeaderComponent {
   title: string;
 
-  constructor(private dialog: MatDialog) {
+  constructor(private _dialog: MatDialog) {
     this.title = 'Task Flow';
   }
 
@@ -20,6 +20,6 @@ export class HeaderComponent {
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
 
-    this.dialog.open(TaskDialogComponent, dialogConfig);
+    this._dialog.open(TaskDialogComponent, dialogConfig);
   }
 }

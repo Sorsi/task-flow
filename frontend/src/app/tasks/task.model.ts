@@ -1,10 +1,10 @@
 export interface Task {
-  id: string;
+  _id: string;
   title: string;
   description?: string;
   assignee?: string;
   added: Date;
-  dueDate?: Date;
+  dueDate?: Date | null;
   priority: Priority;
   status: Status;
   completed: Date;

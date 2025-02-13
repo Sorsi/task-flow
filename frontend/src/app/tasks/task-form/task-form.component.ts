@@ -5,8 +5,10 @@ import { Priority } from '../task.model';
 @Component({
   selector: 'app-task-form',
   templateUrl: './task-form.component.html',
+  styleUrls: ['./task-form.component.less'],
 })
 export class TaskFormComponent {
+  readonly minDate = new Date();
   taskForm: FormGroup;
   taskFormLabels = {
     title: 'Title',
@@ -18,12 +20,12 @@ export class TaskFormComponent {
   };
   priorities: Priority[] = [Priority.LOW, Priority.MEDIUM, Priority.HIGH];
 
-  constructor(private fb: FormBuilder) {
-    this.taskForm = this.fb.group({
+  constructor(private _fb: FormBuilder) {
+    this.taskForm = this._fb.group({
       title: ['', [Validators.required, Validators.minLength(3)]],
       description: [''],
       assignee: [''],
-      dueDate: [''],
+      dueDate: [new Date()],
       priority: [Priority.MEDIUM],
       completed: [false],
     });

@@ -11,8 +11,8 @@ export class TaskDialogComponent implements OnInit {
   @ViewChild(TaskFormComponent) taskFormComponent!: TaskFormComponent;
 
   constructor(
-    private dialogRef: MatDialogRef<TaskDialogComponent>,
-    private taskService: TaskService
+    private _dialogRef: MatDialogRef<TaskDialogComponent>,
+    private _taskService: TaskService
   ) {}
 
   ngOnInit(): void {}
@@ -23,19 +23,14 @@ export class TaskDialogComponent implements OnInit {
 
   save(): void {
     if (this.isFormValid()) {
-      console.log(
-        'save dialog is vlaid ',
-        this.taskFormComponent.taskForm.value
-      );
-      const task = this.taskFormComponent.taskForm.value;
-      this.taskService
-        .createTask(task)
-        .subscribe((ta) => console.log('taaa ', ta));
+      this._taskService
+        .createTask(this.taskFormComponent.taskForm.value)
+        .subscribe();
       this.close();
     }
   }
 
   close(): void {
-    this.dialogRef.close();
+    this._dialogRef.close();
   }
 }

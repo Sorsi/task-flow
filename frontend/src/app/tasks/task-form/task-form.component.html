@@ -16,12 +16,7 @@
     <!-- DESCRIPTION -->
     <mat-form-field>
       <mat-label>{{ taskFormLabels.description }}</mat-label>
-      <input
-        matInput
-        formControlName="description"
-        placeholder="Enter description of your task"
-        type="textarea"
-      />
+      <textarea matInput rows="5" formControlName="description"> </textarea>
     </mat-form-field>
     <!-- ASSIGNEE -->
     <mat-form-field>
@@ -35,7 +30,12 @@
     <!-- DUE DATE -->
     <mat-form-field type="date">
       <mat-label>{{ taskFormLabels.dueDate }}</mat-label>
-      <input matInput [matDatepicker]="picker" formControlName="dueDate" />
+      <input
+        matInput
+        [matDatepicker]="picker"
+        formControlName="dueDate"
+        [min]="minDate"
+      />
       <mat-hint>MM/DD/YYYY</mat-hint>
       <mat-datepicker-toggle matIconSuffix [for]="picker">
         <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>

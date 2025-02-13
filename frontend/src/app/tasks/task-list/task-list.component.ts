@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Task } from '../task.model';
 import { TaskService } from '../task.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-tasks-list',
@@ -8,21 +9,21 @@ import { TaskService } from '../task.service';
   styleUrls: ['./task-list.component.less'],
 })
 export class TaskListComponent implements OnInit {
-  tasks: Task[];
+  tasks$: Observable<Task[]>;
 
-  constructor(private taskService: TaskService) {
-    this.tasks = [];
+  constructor(private _taskService: TaskService) {
+    this.tasks$ = this._taskService.getTasks();
   }
   ngOnInit() {
-    console.log('wassssup ?? ');
-    this.loadTasks();
-  }
-
-  loadTasks(): void {
-    this.taskService.getTasks().subscribe((tasks) => (this.tasks = tasks));
+    this._taskService.loadTasks();
   }
 
   deleteTask(id: string) {
-    console.log('clicked delete');
+    if (!id) return;
+    this._taskService.deleteTask(id).subscribe({
+      error: (err) => {
+        console.error('Error loading tasks:', err);
+      },
+    });
   }
 }
