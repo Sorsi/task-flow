@@ -14,7 +14,9 @@ export class TaskService {
   constructor(
     private _http: HttpClient,
     private _errorHandler: ErrorHandlingService
-  ) {}
+  ) {
+    this.loadTasks();
+  }
 
   /* Getting data stream */
   getTasks(): Observable<Task[]> {
@@ -23,6 +25,8 @@ export class TaskService {
 
   /* Loading data from API and updating the stream */
   loadTasks(): void {
+    console.log('task service loadtasks');
+
     this._http.get<Task[]>(this._apiUrl).subscribe({
       next: (tasks) => this._tasksSubject.next(tasks),
       error: (error) => {

@@ -1,53 +1,89 @@
 <h2>Task List</h2>
 
+<mat-form-field>
+  <mat-label>Filter</mat-label>
+  <input
+    matInput
+    [formControl]="filterControl"
+    placeholder="Filter e.g. task..."
+    #input
+  />
+</mat-form-field>
+
 <ng-template #errorTpl>
   <p>Error loading tasks. Please try again later.</p>
 </ng-template>
 
-<mat-table [dataSource]="tasks$" class="mat-elevation-z8">
-  <ng-container matColumnDef="title">
-    <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
-    <mat-cell *matCellDef="let task"> {{ task.title }} </mat-cell>
-  </ng-container>
-
-  <ng-container matColumnDef="assignee">
-    <mat-header-cell *matHeaderCellDef> Assignee </mat-header-cell>
-    <mat-cell *matCellDef="let task"> {{ task.assignee }} </mat-cell>
-  </ng-container>
-
-  <ng-container matColumnDef="dueDate">
-    <mat-header-cell *matHeaderCellDef> Due Date </mat-header-cell>
-    <mat-cell *matCellDef="let task"> {{ task.dueDate }} </mat-cell>
-  </ng-container>
-
-  <ng-container matColumnDef="status">
-    <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
-    <mat-cell *matCellDef="let task">
-      <mat-chip [color]="getStatusColor(task.priority)">{{
-        task.status
-      }}</mat-chip>
-    </mat-cell>
-  </ng-container>
-
-  <ng-container matColumnDef="priority">
-    <mat-header-cell *matHeaderCellDef> Priority </mat-header-cell>
-    <mat-cell *matCellDef="let task"> {{ task.priority }} </mat-cell>
-  </ng-container>
-
-  <ng-container matColumnDef="actions">
-    <mat-header-cell *matHeaderCellDef></mat-header-cell>
-    <mat-cell *matCellDef="let task">
-      <button
-        mat-mini-fab
-        aria-label="delete icon"
-        color="warn"
-        (click)="deleteTask(task._id)"
+<div>
+  <table
+    *ngIf="taskData$ | async as tasks; else errorTpl"
+    mat-table
+    matSort
+    [dataSource]="dataSource"
+    multiTemplateDataRows
+    class="mat-elevation-z8"
+    [trackBy]="trackByFn"
+  >
+    <!-- Base columns -->
+    <ng-container
+      *ngFor="let column of columnsToDisplay"
+      matColumnDef="{{ column }}"
+    >
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ column }}</th>
+      <td mat-cell *matCellDef="let element">{{ element[column] }}</td>
+    </ng-container>
+    <!-- Expand button -->
+    <ng-container matColumnDef="expand">
+      <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
+      <td mat-cell *matCellDef="let element">
+        <button
+          mat-icon-button
+          aria-label="expand row"
+          (click)="
+            expandedElement = expandedElement === element ? null : element;
+            $event.stopPropagation()
+          "
+        >
+          <mat-icon *ngIf="expandedElement === element; else down"
+            >keyboard_arrow_up</mat-icon
+          >
+          <ng-template #down>
+            <mat-icon>keyboard_arrow_down</mat-icon>
+          </ng-template>
+        </button>
+      </td>
+    </ng-container>
+    <!-- Expandable part -->
+    <ng-container matColumnDef="expandedDetail">
+      <td
+        mat-cell
+        *matCellDef="let element"
+        [attr.colspan]="columnsToDisplayWithExpand.length"
       >
-        <mat-icon>delete</mat-icon>
-      </button>
-    </mat-cell>
-  </ng-container>
-
-  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
-</mat-table>
+        <div class="example-element-detail" *ngIf="expandedElement === element">
+          <div class="example-element-description">
+            {{ element.description }}
+          </div>
+        </div>
+      </td>
+    </ng-container>
+    <!-- Table row -->
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
+    <tr
+      mat-row
+      *matRowDef="let element; columns: columnsToDisplayWithExpand"
+      class="example-element-row"
+      [class.example-expanded-row]="expandedElement === element"
+      (click)="expandedElement = expandedElement === element ? null : element"
+    ></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: ['expandedDetail']"
+      class="example-detail-row"
+    ></tr>
+  </table>
+  <mat-paginator
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    aria-label="Select page of users"
+  ></mat-paginator>
+</div>

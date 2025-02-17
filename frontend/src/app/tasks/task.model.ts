@@ -22,3 +22,12 @@ export enum Status {
   DONE = 'done',
   BLOCKED = 'blocked',
 }
+
+/* export enum TableHeaderValues {
+  TITLE = 'Title',
+  ASSIGNEE = 'Assignee',
+  DUE_DATE = 'Due Date',
+  STATUS = 'Status',
+  PRIORITY = 'Priority',
+  ACTIONS = 'Actions',
+} */
