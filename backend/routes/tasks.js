@@ -10,7 +10,7 @@ router.get("/", async (req, res) => {
     res.status(200).json(tasks);
   } catch (error) {
     console.error(error);
-    res.status(500).send("Error retrieving users");
+    res.status(500).send("Error retrieving tasks");
   }
 });
 
