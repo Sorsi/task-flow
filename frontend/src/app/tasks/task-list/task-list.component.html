@@ -8,6 +8,13 @@
     placeholder="Filter e.g. task..."
     #input
   />
+  <button
+    mat-icon-button
+    aria-label="delete filter term"
+    (click)="resetFilter()"
+  >
+    <mat-icon>close</mat-icon>
+  </button>
 </mat-form-field>
 
 <ng-template #errorTpl>

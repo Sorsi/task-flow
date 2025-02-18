@@ -52,7 +52,6 @@ export class TaskListComponent implements OnInit {
   constructor(private _taskService: TaskService) {}
 
   ngOnInit() {
-    //this._taskService.loadTasks();
     this.loadTasks();
     this.setupFilter();
   }
@@ -69,8 +68,6 @@ export class TaskListComponent implements OnInit {
       this.taskDataSubject$.next(tasks);
       this.updateTable(tasks);
     });
-
-    //this.loadTasks();
   }
 
   private setupFilter() {
@@ -84,6 +81,10 @@ export class TaskListComponent implements OnInit {
   applyFilter(value: string) {
     const filterValue = normalizeText(value.trim().toLowerCase());
     this.dataSource.filter = filterValue.length >= 3 ? filterValue : '';
+  }
+
+  resetFilter() {
+    this.filterControl.setValue('');
   }
 
   deleteTask(id: string) {
