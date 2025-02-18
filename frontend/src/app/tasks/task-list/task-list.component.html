@@ -17,11 +17,10 @@
   </button>
 </mat-form-field>
 
-<ng-template #errorTpl>
-  <p>Error loading tasks. Please try again later.</p>
-</ng-template>
+<ng-template #errorTpl> </ng-template>
 
 <div>
+  @if (taskData$ | async) {
   <table
     *ngIf="taskData$ | async as tasks; else errorTpl"
     mat-table
@@ -32,13 +31,12 @@
     [trackBy]="trackByFn"
   >
     <!-- Base columns -->
-    <ng-container
-      *ngFor="let column of columnsToDisplay"
-      matColumnDef="{{ column }}"
-    >
+    @for (column of columnsToDisplay; track column) {
+    <ng-container matColumnDef="{{ column }}">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ column }}</th>
       <td mat-cell *matCellDef="let element">{{ element[column] }}</td>
     </ng-container>
+    } @empty { There were no items to display. }
     <!-- Expand button -->
     <ng-container matColumnDef="expand">
       <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
@@ -51,12 +49,11 @@
             $event.stopPropagation()
           "
         >
-          <mat-icon *ngIf="expandedElement === element; else down"
-            >keyboard_arrow_up</mat-icon
-          >
-          <ng-template #down>
-            <mat-icon>keyboard_arrow_down</mat-icon>
-          </ng-template>
+          @if (expandedElement === element) {
+          <mat-icon>keyboard_arrow_up</mat-icon>
+          } @else {
+          <mat-icon>keyboard_arrow_down</mat-icon>
+          }
         </button>
       </td>
     </ng-container>
@@ -67,11 +64,13 @@
         *matCellDef="let element"
         [attr.colspan]="columnsToDisplayWithExpand.length"
       >
-        <div class="example-element-detail" *ngIf="expandedElement === element">
+        @if (expandedElement === element) {
+        <div class="example-element-detail">
           <div class="example-element-description">
             {{ element.description }}
           </div>
         </div>
+        }
       </td>
     </ng-container>
     <!-- Table row -->
@@ -89,6 +88,10 @@
       class="example-detail-row"
     ></tr>
   </table>
+  } @else {
+  <p>Error loading tasks. Please try again later.</p>
+  }
+
   <mat-paginator
     [pageSizeOptions]="[5, 10, 25, 100]"
     aria-label="Select page of users"
