@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Priority } from '../task.model';
+import { IPriority, Priority } from '../task.model';
 
 @Component({
   selector: 'app-task-form',
@@ -18,15 +18,30 @@ export class TaskFormComponent {
     priority: 'Priority',
     completed: 'Completed',
   };
-  priorities: Priority[] = [Priority.LOW, Priority.MEDIUM, Priority.HIGH];
+  readonly priorities: IPriority[];
 
   constructor(private _fb: FormBuilder) {
+    this.priorities = [
+      {
+        id: 0,
+        value: Priority.LOW,
+      },
+      {
+        id: 1,
+        value: Priority.MEDIUM,
+      },
+      {
+        id: 2,
+        value: Priority.HIGH,
+      },
+    ];
+
     this.taskForm = this._fb.group({
       title: ['', [Validators.required, Validators.minLength(3)]],
       description: [''],
       assignee: [''],
       dueDate: [new Date()],
-      priority: [Priority.MEDIUM],
+      priority: [this.priorities[0]],
       completed: [false],
     });
   }

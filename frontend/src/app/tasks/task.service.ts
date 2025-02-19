@@ -25,8 +25,6 @@ export class TaskService {
 
   /* Loading data from API and updating the stream */
   loadTasks(): void {
-    console.log('task service loadtasks');
-
     this._http.get<Task[]>(this._apiUrl).subscribe({
       next: (tasks) => this._tasksSubject.next(tasks),
       error: (error) => {
@@ -47,8 +45,6 @@ export class TaskService {
 
   /* Adding new task and updating the stream */
   createTask(task: Task): Observable<Task> {
-    console.log('TASK ', task);
-
     return this._http.post<Task>(this._apiUrl, task).pipe(
       tap((newTask) => {
         this._tasksSubject.next([...this._tasksSubject.value, newTask]);

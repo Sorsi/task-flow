@@ -46,9 +46,9 @@
     <mat-form-field>
       <mat-label>{{ taskFormLabels.priority }}</mat-label>
       <mat-select formControlName="priority">
-        <mat-option *ngFor="let priority of priorities" [value]="priority">{{
-          priority
-        }}</mat-option>
+        @for (priority of priorities; track priority) {
+        <mat-option [value]="priority">{{ priority.value }}</mat-option>
+        }
       </mat-select>
     </mat-form-field>
     <!-- COMPLETED -->

@@ -6,7 +6,7 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
-import { Priority, Task } from '../task.model';
+import { IPriority, Priority, Task } from '../task.model';
 import { TaskService } from '../task.service';
 import { BehaviorSubject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { normalizeText } from './task-list.util';
@@ -54,6 +54,14 @@ export class TaskListComponent implements OnInit {
   ngOnInit() {
     this.loadTasks();
     this.setupFilter();
+    this.dataSource.sortingDataAccessor = (
+      item: Task,
+      sortHeaderId: string
+    ): string | number => {
+      return sortHeaderId === 'priority'
+        ? item.priority.id
+        : (item as any)[sortHeaderId];
+    };
   }
 
   ngAfterViewInit() {
@@ -61,21 +69,6 @@ export class TaskListComponent implements OnInit {
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
     }
-  }
-
-  private loadTasks() {
-    this._taskService.getTasks().subscribe((tasks) => {
-      this.taskDataSubject$.next(tasks);
-      this.updateTable(tasks);
-    });
-  }
-
-  private setupFilter() {
-    this.filterControl.valueChanges
-      .pipe(debounceTime(300), distinctUntilChanged())
-      .subscribe((filterValue) => {
-        this.applyFilter(filterValue ?? '');
-      });
   }
 
   applyFilter(value: string) {
@@ -102,10 +95,6 @@ export class TaskListComponent implements OnInit {
     return item._id;
   }
 
-  private updateTable(tasks: Task[]) {
-    this.dataSource.data = tasks;
-  }
-
   getPriorityClass(priority: Priority): string {
     switch (priority) {
       case Priority.LOW:
@@ -117,5 +106,24 @@ export class TaskListComponent implements OnInit {
       default:
         return 'default-priority';
     }
+  }
+
+  private updateTable(tasks: Task[]) {
+    this.dataSource.data = tasks;
+  }
+
+  private loadTasks() {
+    this._taskService.getTasks().subscribe((tasks) => {
+      this.taskDataSubject$.next(tasks);
+      this.updateTable(tasks);
+    });
+  }
+
+  private setupFilter() {
+    this.filterControl.valueChanges
+      .pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe((filterValue) => {
+        this.applyFilter(filterValue ?? '');
+      });
   }
 }
