@@ -6,7 +6,7 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
-import { Task } from '../task.model';
+import { Priority, Task } from '../task.model';
 import { TaskService } from '../task.service';
 import { BehaviorSubject, debounceTime, distinctUntilChanged } from 'rxjs';
 import { normalizeText } from './task-list.util';
@@ -106,20 +106,16 @@ export class TaskListComponent implements OnInit {
     this.dataSource.data = tasks;
   }
 
-  /* getStatusColor(status: string): string {
-    switch (status) {
+  getPriorityClass(priority: Priority): string {
+    switch (priority) {
       case Priority.LOW:
-        return 'warn';
+        return 'low-priority';
       case Priority.MEDIUM:
-        return 'primary';
+        return 'medium-priority';
       case Priority.HIGH:
-        return 'accent';
+        return 'high-priority';
       default:
-        return '';
+        return 'default-priority';
     }
-  } */
-
-  /* get hasTasks$(): Observable<boolean> {
-    return this.tasks$.pipe(map((tasks) => tasks?.length > 0));
-  } */
+  }
 }

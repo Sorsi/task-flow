@@ -1,20 +1,18 @@
 <h2>Task List</h2>
 
-<mat-form-field>
+<mat-form-field class="filter-input">
   <mat-label>Filter</mat-label>
   <input
     matInput
+    type="text"
     [formControl]="filterControl"
     placeholder="Filter e.g. task..."
-    #input
   />
-  <button
-    mat-icon-button
-    aria-label="delete filter term"
-    (click)="resetFilter()"
-  >
+  @if (filterControl.value) {
+  <button matSuffix mat-icon-button aria-label="Clear" (click)="resetFilter()">
     <mat-icon>close</mat-icon>
   </button>
+  }
 </mat-form-field>
 
 <ng-template #errorTpl> </ng-template>
@@ -34,7 +32,22 @@
     @for (column of columnsToDisplay; track column) {
     <ng-container matColumnDef="{{ column }}">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ column }}</th>
-      <td mat-cell *matCellDef="let element">{{ element[column] }}</td>
+      <td mat-cell *matCellDef="let element">
+        @switch (column) { @case ("dueDate") {
+        {{ element[column] | date }}
+        } @case ("actions") {
+        <mat-icon (click)="deleteTask(element._id)">delete</mat-icon>
+        } @case ("priority") {
+        <div
+          class="priority-badge"
+          [ngClass]="getPriorityClass(element[column])"
+        >
+          {{ element[column] }}
+        </div>
+        } @default {
+        {{ element[column] }}
+        } }
+      </td>
     </ng-container>
     } @empty { There were no items to display. }
     <!-- Expand button -->
